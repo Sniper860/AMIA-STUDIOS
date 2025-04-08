@@ -267,11 +267,13 @@ body.dark-mode .nav a {
 }
 
 .hero-image {
-    flex: 1;
-    position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
 }
 
 .abstract-circle {
@@ -290,11 +292,19 @@ body.dark-mode .nav a {
     box-shadow: var(--shadow-md);
 }
 
-/* Features Section */
-.features {
+.dyanmic-background {
     background-color: var(--background-light);
     border-radius: var(--radius-lg);
     padding: 6rem 2rem;
+}
+
+/* Features Section */
+.features {
+    margin-top: 40px;
+    background-color: var(--background-light);
+    border-radius: var(--radius-lg);
+    padding: 6rem 2rem;
+    margin-bottom: 40px;
 }
 
 body.dark-mode .features {
@@ -361,11 +371,16 @@ body.dark-mode .feature-card {
 
 /* About Page */
 .about-hero {
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 80px);
     /* text-align: center; */
+    background-color: var(--background-light);
+    border-radius: var(--radius-lg);
+    padding: 6rem 2rem;
+    margin-bottom: 40px;
 }
 
 .about-content {
