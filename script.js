@@ -1,7 +1,14 @@
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Adjust feature section position
-    adjustFeatureSectionPosition();
+    
+    // Show loading animation
+    showLoadingAnimation();
+    
+    // Check if user is already logged in
+    checkAuthState();
+    
+    // Add intro animation
+    playIntroAnimation();
     
     // Header buttons functionality
     initHeaderButtons();
@@ -17,30 +24,166 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize feature card links
     initFeatureCards();
+    
+    // Initialize mobile menu
+    initMobileMenu();
 });
+  
+  // Loading animation
+  function showLoadingAnimation() {
+      // Create loading overlay
+      const loadingOverlay = document.createElement('div');
+      loadingOverlay.className = 'loading-overlay';
+      loadingOverlay.style.position = 'fixed';
+      loadingOverlay.style.top = '0';
+      loadingOverlay.style.left = '0';
+      loadingOverlay.style.width = '100%';
+      loadingOverlay.style.height = '100%';
+      loadingOverlay.style.backgroundColor = '#000';
+      loadingOverlay.style.display = 'flex';
+      loadingOverlay.style.justifyContent = 'center';
+      loadingOverlay.style.alignItems = 'center';
+      loadingOverlay.style.zIndex = '9999';
+      loadingOverlay.style.transition = 'opacity 0.5s ease';
+      
+      // Create logo
+      const logo = document.createElement('div');
+      logo.className = 'loading-logo';
+      logo.textContent = 'AMIA STUDIOS';
+      logo.style.color = '#5E62E2';
+      logo.style.fontSize = '2rem';
+      logo.style.fontWeight = 'bold';
+      logo.style.opacity = '0';
+      logo.style.transform = 'scale(0.8)';
+      logo.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      
+      // Create loading spinner
+      const spinner = document.createElement('div');
+      spinner.className = 'loading-spinner';
+      spinner.style.width = '40px';
+      spinner.style.height = '40px';
+      spinner.style.borderRadius = '50%';
+      spinner.style.border = '3px solid rgba(94, 98, 226, 0.2)';
+      spinner.style.borderTopColor = '#5E62E2';
+      spinner.style.animation = 'spin 1s linear infinite';
+      spinner.style.marginTop = '20px';
+      
+      // Add keyframes for spinner
+      const style = document.createElement('style');
+      style.textContent = `
+          @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+          }
+      `;
+      document.head.appendChild(style);
+      
+      // Create loading container
+      const loadingContainer = document.createElement('div');
+      loadingContainer.style.display = 'flex';
+      loadingContainer.style.flexDirection = 'column';
+      loadingContainer.style.alignItems = 'center';
+      
+      loadingContainer.appendChild(logo);
+      loadingContainer.appendChild(spinner);
+      loadingOverlay.appendChild(loadingContainer);
+      document.body.appendChild(loadingOverlay);
+      
+      // Animate logo
+      setTimeout(() => {
+          logo.style.opacity = '1';
+          logo.style.transform = 'scale(1)';
+      }, 100);
+      
+      // Remove loading overlay after assets are loaded
+      window.addEventListener('load', () => {
+          setTimeout(() => {
+              loadingOverlay.style.opacity = '0';
+              setTimeout(() => {
+                  loadingOverlay.remove();
+              }, 500);
+          }, 1500);
+      });
+      
+      // Fallback for removing loading screen if load event doesn't fire
+      setTimeout(() => {
+          loadingOverlay.style.opacity = '0';
+          setTimeout(() => {
+              loadingOverlay.remove();
+          }, 500);
+      }, 3000);
+  }
+  
+  // Intro animation
+  function playIntroAnimation() {
+      // Elements to animate
+      const elementsToAnimate = [
+          { selector: '.header', delay: 300, transform: 'translateY(-20px)' },
+          { selector: '.hero-content h1', delay: 600, transform: 'translateY(20px)' },
+          { selector: '.hero-content p', delay: 800, transform: 'translateY(20px)' },
+          { selector: '.hero-buttons', delay: 1000, transform: 'translateY(20px)' },
+          { selector: '.hero-image', delay: 1200, transform: 'translateX(20px)' }
+      ];
+      
+      // Set initial states
+      elementsToAnimate.forEach(item => {
+          const elements = document.querySelectorAll(item.selector);
+          elements.forEach(element => {
+              element.style.opacity = '0';
+              element.style.transform = item.transform;
+              element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+          });
+      });
+      
+      // Animate elements
+      elementsToAnimate.forEach(item => {
+          setTimeout(() => {
+              const elements = document.querySelectorAll(item.selector);
+              elements.forEach(element => {
+                  element.style.opacity = '1';
+                  element.style.transform = 'translate(0)';
+              });
+          }, item.delay);
+      });
+  }
 
-// Adjust the position of the feature section to move it upward
-function adjustFeatureSectionPosition() {
-    const featuresSection = document.querySelector('.features');
-    if (featuresSection) {
-        // Reduce the top padding of the features section
-        featuresSection.style.paddingTop = '3rem';
+// Update UI for logged in user
+function updateUIForLoggedInUser(user) {
+    const loginBtn = document.querySelector('.btn-login');
+    const getStartedBtn = document.querySelector('.btn-primary');
+    
+    if (loginBtn) {
+        loginBtn.textContent = 'My Account';
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'dashboard.php';
+        });
+    }
+    
+    if (getStartedBtn) {
+        getStartedBtn.textContent = 'Logout';
+        getStartedBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'logout.php';
+        });
+    }
+    
+    // You could also add a welcome message
+    const header = document.querySelector('.header');
+    if (header) {
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.classList.add('welcome-message');
+        welcomeMsg.textContent = `Welcome, ${user.full_name}`;
+        welcomeMsg.style.marginRight = '20px';
+        welcomeMsg.style.color = 'var(--primary-color)';
         
-        // Also adjust the padding of hero section to reduce space
-        const heroSection = document.querySelector('.hero');
-        if (heroSection) {
-            heroSection.style.paddingBottom = '2rem';
-            // Reduce min-height to make it more compact
-            heroSection.style.minHeight = 'auto';
-        }
-        
-        // If there's any section between hero and features, adjust that too
-        const sectionAboveFeatures = featuresSection.previousElementSibling;
-        if (sectionAboveFeatures && sectionAboveFeatures !== heroSection) {
-            sectionAboveFeatures.style.paddingBottom = '1rem';
+        const ctaButtons = document.querySelector('.cta-buttons');
+        if (ctaButtons) {
+            header.insertBefore(welcomeMsg, ctaButtons);
         }
     }
 }
+
 
 // Header buttons functionality
 function initHeaderButtons() {
@@ -130,7 +273,9 @@ function createNewPage(type) {
         initHeaderScrollEffect();
         initScrollAnimations();
         initFeatureCards();
-        adjustFeatureSectionPosition(); // Don't forget to reapply position adjustments
+        
+        // Check login status again
+        checkLoginStatus();
     });
     
     header.appendChild(logo);
@@ -151,6 +296,7 @@ function createNewPage(type) {
     
     // Create form
     const form = document.createElement('form');
+    form.id = type === 'login' ? 'login-form' : 'signup-form';
     
     // Email field
     const emailGroup = document.createElement('div');
@@ -164,6 +310,7 @@ function createNewPage(type) {
     
     const emailInput = document.createElement('input');
     emailInput.type = 'email';
+    emailInput.name = 'email';
     emailInput.required = true;
     emailInput.style.width = '100%';
     emailInput.style.padding = '1rem';
@@ -174,6 +321,7 @@ function createNewPage(type) {
     
     emailGroup.appendChild(emailLabel);
     emailGroup.appendChild(emailInput);
+    form.appendChild(emailGroup);
     
     // Password field
     const passwordGroup = document.createElement('div');
@@ -187,6 +335,7 @@ function createNewPage(type) {
     
     const passwordInput = document.createElement('input');
     passwordInput.type = 'password';
+    passwordInput.name = 'password';
     passwordInput.required = true;
     passwordInput.style.width = '100%';
     passwordInput.style.padding = '1rem';
@@ -197,6 +346,7 @@ function createNewPage(type) {
     
     passwordGroup.appendChild(passwordLabel);
     passwordGroup.appendChild(passwordInput);
+    form.appendChild(passwordGroup);
     
     // Add name field if signup
     if (type === 'signup') {
@@ -211,6 +361,7 @@ function createNewPage(type) {
         
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
+        nameInput.name = 'full_name';
         nameInput.required = true;
         nameInput.style.width = '100%';
         nameInput.style.padding = '1rem';
@@ -221,11 +372,19 @@ function createNewPage(type) {
         
         nameGroup.appendChild(nameLabel);
         nameGroup.appendChild(nameInput);
-        
-        // Insert name field before email
         form.appendChild(nameGroup);
+    
     }
     
+    // Message container for feedback
+    const messageContainer = document.createElement('div');
+    messageContainer.id = 'message-container';
+    messageContainer.style.marginBottom = '1.5rem';
+    messageContainer.style.padding = '0.75rem';
+    messageContainer.style.borderRadius = '8px';
+    messageContainer.style.display = 'none';
+    form.appendChild(messageContainer);
+
     // Submit button
     const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';

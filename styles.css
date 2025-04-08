@@ -648,3 +648,67 @@ body.dark-mode .social-icon svg {
         text-align: center;
     }
 }
+
+/* Loading overlay animations */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+  
+  .fade-out {
+    opacity: 1;
+    animation: fadeOut 0.5s forwards;
+  }
+  
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes fadeOut {
+    to { opacity: 0; }
+  }
+  
+  /* Intro animation for body (example: a simple fade in) */
+  .intro-animation {
+    animation: bodyFadeIn 1.5s ease-in-out;
+  }
+  
+  @keyframes bodyFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Pop-in effect for user initial */
+  .pop-in {
+    animation: popIn 0.5s ease-out;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  /* Example styling for the loading overlay */
+  #loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #555;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
